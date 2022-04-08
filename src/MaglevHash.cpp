@@ -43,8 +43,8 @@ void MaglevHash::updatePermutation(){
     permutationSkip = new uint32_t [size]();
     set<uint32_t>::iterator iter;
     for(iter = workSet.begin(), i = 0; iter != workSet.end(); iter++, i++){
-        permutationOffset[i] = gen32bitRandNumber(*iter) % M;
-        permutationSkip[i] = crc32c_sse42_u64(*iter, permutationOffset[i]) % (M - 1) + 1;
+        permutationOffset[i] = crc32c_sse42_u64(*iter, 13) % M;
+        permutationSkip[i] = crc32c_sse42_u64(*iter, 29) % (M - 1) + 1;
     }
 }
 
@@ -84,8 +84,7 @@ uint32_t MaglevHash::getSize(){
 
 uint32_t MaglevHash::getNodeID(uint32_t key, uint32_t* ASL){
     *ASL = 1;
-    uint32_t key2 = gen32bitRandNumber(key);
-    uint32_t bs = crc32c_sse42_u64(key, key2) % M;
+    uint32_t bs = crc32c_sse42_u64(key, 25214903917) % M;
     return lookupTable[bs];
 }
 
