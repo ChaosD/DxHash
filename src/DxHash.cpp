@@ -78,21 +78,18 @@ uint32_t DxHash::updateAddition(){
 
 uint32_t DxHash::getNodeID(uint32_t key, uint32_t* numHash){
 	uint32_t key2 = gen32bitRandNumber(key);	
-	uint32_t bs = crc32c_sse42_u64(key, key2);
+	uint32_t r = crc32c_sse42_u64(key, key2);
 	uint32_t index = bs % size;	
 	uint32_t i = 1;
 	while(!nodes[index]){
-		bs = crc32c_sse42_u64(bs, key2);
+		r = crc32c_sse42_u64(r, key2);
 		// weight = (float)gen32bitRandNumber(key) / 0xffffffff;
-		index = bs % size;
-		// key = gen32bitRandNumber(key);
-		// index = calcuNodeIDbyK(key);
+		index = r % size;
 		i+=1;
 		if (i >= 4 * size){
 			return -1;
 		}
 		// printf("%lx\n", randNum);
-		// index = key 
 		// printf("index: %x\n", index);
 	};
 	*numHash = i;
