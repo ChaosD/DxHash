@@ -79,13 +79,14 @@ uint32_t DxHash::updateAddition(){
 uint32_t DxHash::getNodeID(uint32_t key, uint32_t* numHash){
 	uint32_t key2 = gen32bitRandNumber(key);	
 	uint32_t r = crc32c_sse42_u64(key, key2);
-	uint32_t index = bs % size;	
+	uint32_t index = r % size;	
 	uint32_t i = 1;
 	while(!nodes[index]){
 		r = crc32c_sse42_u64(r, key2);
 		// weight = (float)gen32bitRandNumber(key) / 0xffffffff;
 		index = r % size;
 		i+=1;
+		// If cannot find a alive node, return with error.
 		if (i >= 4 * size){
 			return -1;
 		}
